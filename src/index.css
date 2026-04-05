@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,700&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #ece0cd;
+  --surface: #f7f0e4;
+  --panel: rgba(255, 252, 247, 0.84);
+  --panel-solid: #f8f4eb;
+  --text: #273526;
+  --muted: #6e755f;
+  --border: rgba(112, 112, 93, 0.14);
+  --chip: rgba(255, 255, 255, 0.74);
+  --chip-active: #4f7756;
+  --primary: #4f7756;
+  --danger: #c96e56;
+  --shadow: rgba(109, 95, 66, 0.12) 0 16px 36px;
+  --brand: #4f7756;
+  --terracotta: #c98a58;
+  --ink-strong: #1f2c1f;
+  --ink: #3f4d3d;
+  --ink-soft: #6c715f;
+  --line: rgba(124, 121, 104, 0.18);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-ui: 'Outfit', 'Segoe UI', sans-serif;
+  --app-dvh: 100vh;
+  --app-svh: 100vh;
+
+  font-family: var(--font-ui);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --app-svh: 100svh;
+  }
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --app-dvh: 100dvh;
+    --app-svh: 100dvh;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  min-height: var(--app-svh);
+}
+
+body {
+  margin: 0;
+  min-height: var(--app-dvh);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.RouteLoadingFallback {
+  min-height: var(--app-dvh);
+  width: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(226, 214, 182, 0.4), transparent 26%),
+    linear-gradient(180deg, #f7f2e8 0%, #efe7d9 100%);
+}

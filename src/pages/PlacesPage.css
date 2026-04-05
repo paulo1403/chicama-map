@@ -1,0 +1,308 @@
+.PlacesPageSurface {
+  height: var(--app-dvh);
+  min-height: var(--app-dvh);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(101, 145, 112, 0.18), transparent 0 42%),
+    linear-gradient(180deg, #f7f2e8 0%, #efe7d9 100%);
+}
+
+.PlacesPageFrame {
+  width: min(1160px, 100%);
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.PlacesPageInner {
+  min-height: 0;
+  padding: 14px 14px 12px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+.PlacesControlCard,
+.PlacesResultsPanel,
+.PlacesSidebarCard {
+  border: 1px solid rgba(132, 128, 110, 0.12);
+  background: rgba(255, 252, 247, 0.88);
+  box-shadow: 0 14px 30px rgba(88, 76, 57, 0.08);
+}
+
+.PlacesControlCard {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 22px;
+}
+
+.PlacesSearchRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.PlacesSearchField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 10px 0 12px;
+  min-height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(132, 128, 110, 0.1);
+  background: linear-gradient(180deg, rgba(248, 244, 236, 0.92), rgba(248, 244, 236, 0.76));
+}
+
+.PlacesSearchField input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+}
+
+.PlacesSearchField input:focus {
+  outline: none;
+}
+
+.PlacesSearchField input::placeholder {
+  color: rgba(102, 110, 89, 0.76);
+}
+
+.PlacesSearchIcon {
+  width: 16px;
+  height: 16px;
+  color: rgba(120, 124, 106, 0.82);
+  flex: 0 0 auto;
+}
+
+.PlacesChips {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.PlacesChips::-webkit-scrollbar {
+  display: none;
+}
+
+.PlacesContentLayout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  gap: 12px;
+}
+
+.PlacesResultsPanel {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.PlacesResultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(136, 125, 103, 0.12);
+  background: linear-gradient(180deg, rgba(248, 241, 229, 0.96) 0%, rgba(255, 252, 247, 0.9) 100%);
+}
+
+.PlacesResultsMeta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.PlacesSortField {
+  flex: 0 0 auto;
+}
+
+.SortSelect {
+  min-height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(132, 128, 110, 0.18);
+  background: rgba(255, 252, 247, 0.92);
+  color: var(--ink);
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.PlacesResultsTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(71, 112, 85, 0.1);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.PlacesResultsScroll {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 10px 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+
+.PlacesResultsScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.PlacesInfiniteTrigger {
+  width: 100%;
+  height: 1px;
+}
+
+.PlacesLoadMoreStatus {
+  padding: 8px 4px 2px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.PlacesSidebar {
+  min-height: 0;
+  position: sticky;
+  top: 12px;
+  align-self: start;
+}
+
+.PlacesSidebarCard {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 24px;
+}
+
+.PlacesSidebarLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(102, 110, 89, 0.82);
+}
+
+@media (max-width: 920px) {
+  .PlacesContentLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .PlacesSidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 719px) {
+  .PlacesPageSurface {
+    height: var(--app-dvh);
+    overflow: hidden;
+  }
+
+  .PlacesPageFrame {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  .PlacesPageInner {
+    padding: 10px 8px calc(96px + env(safe-area-inset-bottom, 0px));
+    gap: 10px;
+  }
+
+  .PlacesControlCard {
+    padding: 8px;
+    border-radius: 20px;
+  }
+
+  .PlacesSearchRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .PlacesContentLayout {
+    min-height: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .PlacesResultsPanel {
+    min-height: 0;
+    overflow: hidden;
+    border-radius: 22px;
+  }
+
+  .PlacesResultsHeader {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 10px 12px;
+  }
+
+  .PlacesResultsMeta {
+    justify-content: space-between;
+  }
+
+  .SortSelect {
+    width: 100%;
+  }
+
+  .PlacesResultsScroll {
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    padding: 0 6px 10px;
+  }
+
+  .PlacesLoadMoreStatus {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (min-width: 720px) {
+  .PlacesPageSurface {
+    background:
+      radial-gradient(circle at top left, rgba(226, 214, 182, 0.82), transparent 26%),
+      linear-gradient(180deg, #ece1ce 0%, #ddd1bf 100%);
+  }
+
+  .PlacesPageFrame {
+    height: calc(var(--app-dvh) - 24px);
+    margin: 12px auto;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 28px 80px rgba(90, 78, 58, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(180deg, rgba(247, 242, 232, 0.92) 0%, rgba(239, 231, 217, 0.92) 100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .PlacesPageFrame {
+    width: min(1220px, calc(100% - 40px));
+    height: calc(var(--app-dvh) - 32px);
+    margin: 16px auto;
+    border-radius: 26px;
+  }
+
+  .PlacesPageInner {
+    padding: 16px 16px 14px;
+  }
+}

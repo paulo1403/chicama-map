@@ -1,0 +1,25 @@
+{
+  "name": "chicama-api",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "postinstall": "bunx --bun prisma generate",
+    "prisma:generate": "bunx --bun prisma generate",
+    "prisma:migrate": "bunx --bun prisma migrate dev",
+    "prisma:studio": "bunx --bun prisma studio",
+    "dev": "bun --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "seed": "bun run src/seed.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.0.3",
+    "@elysiajs/jwt": "^1.0.3",
+    "@prisma/client": "^7.0.0",
+    "dotenv": "^17.0.0",
+    "elysia": "^1.0.20",
+    "prisma-adapter-bun-sqlite": "^0.6.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.0.0"
+  }
+}

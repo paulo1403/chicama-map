@@ -1,0 +1,125 @@
+.Button,
+.Chip {
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.LanguageToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(255, 252, 247, 0.84);
+  box-shadow: 0 8px 22px rgba(98, 90, 68, 0.08);
+}
+
+.LanguageToggleButton {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.Button {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(98, 90, 68, 0.08);
+  color: var(--ink-strong);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.ButtonPrimary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #f8f1e4;
+}
+
+.ButtonDanger {
+  background: rgba(201, 110, 86, 0.14);
+  border-color: rgba(201, 110, 86, 0.28);
+  color: #8d4e43;
+}
+
+.Chip {
+  border: 1px solid rgba(104, 101, 85, 0.2);
+  background: rgba(255, 250, 243, 0.92);
+  padding: 9px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-strong);
+  box-shadow: 0 8px 18px rgba(98, 90, 68, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+}
+
+.ChipActive {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #f8f1e4;
+  box-shadow: 0 10px 22px rgba(79, 119, 86, 0.2);
+}
+
+.Field {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.74);
+  padding: 11px 12px;
+}
+
+.Field:focus,
+.Button:focus-visible,
+.Chip:focus-visible {
+  outline: 2px solid rgba(71, 112, 85, 0.42);
+  outline-offset: 2px;
+}
+
+.Field:focus {
+  outline-offset: 0;
+}
+
+.Button:hover,
+.Chip:hover {
+  transform: translateY(-1px);
+}
+
+.Button:disabled,
+.Chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 719px) {
+  .Chip {
+    border-color: rgba(96, 92, 74, 0.32);
+    background: #fffdf8;
+    color: #243323;
+    box-shadow: 0 8px 18px rgba(92, 82, 61, 0.08);
+  }
+
+  .ChipActive {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff7eb;
+    box-shadow: 0 12px 24px rgba(79, 119, 86, 0.24);
+  }
+}

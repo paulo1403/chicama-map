@@ -1,0 +1,159 @@
+.FeatureCard {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 14px;
+  padding: 16px;
+  margin-top: 14px;
+  border-radius: 22px;
+  background: rgba(255, 252, 247, 0.9);
+  border: 1px solid rgba(132, 128, 110, 0.12);
+  box-shadow: 0 16px 34px rgba(97, 88, 69, 0.09);
+}
+
+.FeatureCardLoading {
+  pointer-events: none;
+}
+
+.FeatureMedia {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  width: 84px;
+  height: 84px;
+}
+
+.FeatureMedia--food {
+  background: linear-gradient(135deg, #9dc08b 0%, #c8ddaf 100%);
+}
+
+.FeatureMedia--shop {
+  background: linear-gradient(135deg, #d9b087 0%, #efcfaa 100%);
+}
+
+.FeatureMedia--stay {
+  background: linear-gradient(135deg, #96b8a2 0%, #ccddc9 100%);
+}
+
+.FeatureMedia--surf {
+  background: linear-gradient(135deg, #88b2ae 0%, #bbd5d1 100%);
+}
+
+.FeatureMedia--local {
+  background: linear-gradient(135deg, #b8b79d 0%, #d9d5b8 100%);
+}
+
+.FeaturePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.28), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 100%);
+}
+
+.PointMediaIcon {
+  width: 24px;
+  height: 24px;
+  color: rgba(255, 252, 245, 0.92);
+  filter: drop-shadow(0 4px 10px rgba(64, 55, 39, 0.16));
+}
+
+.FeatureBody {
+  min-width: 0;
+}
+
+.FeatureTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.FeatureTitle {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.05;
+  font-weight: 700;
+  color: var(--ink-strong);
+}
+
+.FeatureSubtitle {
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.FeatureDescription {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.FeatureActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.PointBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.Badge {
+  font-size: 12px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(132, 128, 110, 0.16);
+  background: rgba(240, 235, 225, 0.88);
+  color: var(--ink);
+}
+
+.SaveButton,
+.ActionButton {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(98, 90, 68, 0.08);
+  color: var(--ink-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 140ms ease;
+}
+
+.SaveButtonActive,
+.ActionButtonPrimary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #f8f1e4;
+}
+
+.SaveButton:hover,
+.ActionButton:hover {
+  transform: translateY(-1px);
+}
+
+.SaveButton:focus-visible,
+.ActionButton:focus-visible {
+  outline: 2px solid rgba(71, 112, 85, 0.42);
+  outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+  .FeatureCard {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .FeatureMedia {
+    width: 72px;
+    height: 72px;
+  }
+}

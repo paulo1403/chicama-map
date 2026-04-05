@@ -1,0 +1,580 @@
+.App {
+  position: relative;
+  height: var(--app-dvh);
+  min-height: var(--app-dvh);
+  width: 100%;
+  overflow: hidden;
+}
+
+.AppShell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(318px, 44%) 1fr auto;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  background:
+    radial-gradient(circle at top left, rgba(239, 228, 194, 0.86), transparent 28%),
+    linear-gradient(180deg, #f7f0e1 0%, #f4eadb 100%);
+  overflow: hidden;
+}
+
+.AppShellMapOnly {
+  grid-template-rows: minmax(0, 1fr) auto auto;
+}
+
+.AppShellMapOnly .MapViewport {
+  min-height: 0;
+}
+
+.AppShellListFullscreen {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.AppShellListFullscreen .MapViewport {
+  display: none;
+}
+
+.AppShellListFullscreen .DiscoveryPanel {
+  grid-row: 1;
+  margin-top: 0;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.AppShellListFullscreen .BottomNav {
+  grid-row: 2;
+  align-self: end;
+}
+
+.MapViewport {
+  position: relative;
+  min-height: 330px;
+  overflow: hidden;
+  background: #d9e0d0;
+}
+
+.Map {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.Map .leaflet-tile-pane {
+  filter: none;
+}
+
+.Map .leaflet-control-container {
+  display: none;
+}
+
+.MapPinMarkerRoot {
+  background: transparent;
+  border: 0;
+}
+
+.MapPinMarker {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px 18px 18px 4px;
+  background: var(--pin-color);
+  color: var(--pin-icon-color);
+  border: 2px solid rgba(255, 251, 245, 0.88);
+  box-shadow: 0 12px 24px rgba(64, 55, 39, 0.24);
+  transform: rotate(-45deg);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.MapPinMarker::after {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.MapPinMarker.is-selected {
+  transform: rotate(-45deg) scale(1.08);
+  box-shadow: 0 16px 30px rgba(53, 47, 35, 0.32);
+  filter: saturate(1.08);
+}
+
+.MapPinMarkerInner {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+}
+
+.MapPinMarkerInner svg {
+  display: block;
+}
+
+.MapWash {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(248, 243, 234, 0.28) 0%, rgba(216, 227, 213, 0.16) 55%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(90deg, transparent 39%, rgba(255, 255, 255, 0.45) 40%, transparent 41%),
+    linear-gradient(180deg, transparent 56%, rgba(255, 255, 255, 0.45) 57%, transparent 58%);
+  pointer-events: none;
+  z-index: 300;
+}
+
+.MapDock {
+  position: relative;
+  isolation: isolate;
+  margin-top: -22px;
+  z-index: 900;
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  background: linear-gradient(180deg, rgba(248, 244, 236, 0.985) 0%, #f7f0e4 100%);
+  padding: 14px 16px 12px;
+  box-shadow: 0 -14px 36px rgba(88, 76, 57, 0.08);
+}
+
+.MapDockTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.MapDockChips {
+  padding-top: 12px;
+}
+
+.MapDockCard .FeatureCard {
+  margin-top: 12px;
+}
+
+.MapDockEmpty {
+  margin-top: 12px;
+}
+
+.MapSortField {
+  margin-left: auto;
+}
+
+.SortSelect {
+  min-height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(132, 128, 110, 0.18);
+  background: rgba(255, 252, 247, 0.92);
+  color: var(--ink);
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.MapClusterMarkerRoot {
+  background: transparent;
+  border: 0;
+}
+
+.MapClusterMarker {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, rgba(126, 171, 130, 0.98), rgba(79, 119, 86, 0.98));
+  color: #fffaf1;
+  font-size: 13px;
+  font-weight: 800;
+  border: 2px solid rgba(255, 251, 245, 0.94);
+  box-shadow: 0 12px 26px rgba(64, 55, 39, 0.24);
+}
+
+.DiscoveryPanel {
+  --panel-gutter: 16px;
+  position: relative;
+  isolation: isolate;
+  margin-top: -22px;
+  z-index: 900;
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  background: linear-gradient(180deg, rgba(248, 244, 236, 0.985) 0%, #f7f0e4 100%);
+  padding: 14px var(--panel-gutter) 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: 0 -14px 36px rgba(88, 76, 57, 0.08);
+}
+
+.DiscoveryPanelSticky {
+  position: relative;
+  z-index: 12;
+  flex: 0 0 auto;
+}
+
+.DiscoveryPanelList {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+}
+
+.DiscoveryPanelList::-webkit-scrollbar {
+  display: none;
+}
+
+.DiscoveryPanelList .ResultsList {
+  overflow: visible;
+}
+
+.PanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.PanelStatus {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.PanelLink {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--brand);
+  cursor: pointer;
+  transition: transform 140ms ease;
+}
+
+.PanelLink:hover {
+  transform: translateY(-1px);
+}
+
+.PanelLink:focus-visible {
+  outline: 2px solid rgba(71, 112, 85, 0.42);
+  outline-offset: 2px;
+}
+
+.PanelLink:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.Chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 14px 2px 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  mask-image: linear-gradient(90deg, transparent 0, black 14px, black calc(100% - 14px), transparent 100%);
+}
+
+.Chips::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 719px) {
+  .App {
+    background: var(--bg);
+  }
+
+  .AppShell {
+    max-width: none;
+    border-radius: 0;
+    height: var(--app-dvh);
+    min-height: var(--app-dvh);
+    max-height: var(--app-dvh);
+    margin: 0;
+    grid-template-rows: minmax(300px, 42dvh) minmax(0, 1fr) auto;
+  }
+
+  .AppShellMapOnly {
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+
+  .AppShell.AppShellListFullscreen {
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .MapWash {
+    background:
+      linear-gradient(180deg, rgba(248, 243, 234, 0.4) 0%, rgba(216, 227, 213, 0.18) 48%, rgba(255, 255, 255, 0) 100%),
+      linear-gradient(90deg, transparent 39%, rgba(255, 255, 255, 0.32) 40%, transparent 41%),
+      linear-gradient(180deg, transparent 56%, rgba(255, 255, 255, 0.32) 57%, transparent 58%);
+  }
+
+  .MapDock {
+    margin-top: -18px;
+    margin-bottom: calc(78px + env(safe-area-inset-bottom));
+    padding: 12px 12px 10px;
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+  }
+
+  .MapDockTopBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .MapSortField {
+    margin-left: 0;
+  }
+
+  .SortSelect {
+    width: 100%;
+  }
+
+  .DiscoveryPanel {
+    --panel-gutter: 10px;
+    background: linear-gradient(180deg, #f8f1e5 0%, #f5ecdf 100%);
+    box-shadow: 0 -18px 44px rgba(88, 76, 57, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(14px);
+    min-height: 0;
+    overflow: hidden;
+    padding: 8px 0 0;
+  }
+
+  .DiscoveryPanelSticky {
+    position: sticky;
+    top: 0;
+    margin-inline: 0;
+    padding: 2px var(--panel-gutter) 10px;
+    z-index: 30;
+    background: linear-gradient(180deg, rgba(248, 241, 229, 0.98) 0%, rgba(248, 241, 229, 0.94) 100%);
+    border-bottom: 1px solid rgba(136, 125, 103, 0.14);
+    box-shadow: 0 6px 16px rgba(99, 87, 67, 0.08);
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+  }
+
+  .DiscoveryPanelSticky::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: -12px;
+    height: 12px;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(248, 241, 229, 0.92) 0%, rgba(248, 241, 229, 0) 100%);
+  }
+
+  .DiscoveryPanelList {
+    min-height: 0;
+    padding: 0 var(--panel-gutter) calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .DiscoveryPanelList .FeatureCard {
+    margin-top: 12px;
+  }
+
+  .DiscoveryPanelList .ResultsList {
+    padding-top: 10px;
+    padding-bottom: 2px;
+  }
+
+  .AppShellListFullscreen .DiscoveryPanel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+    justify-items: stretch;
+    padding: 10px 0 0;
+  }
+
+  .AppShellListFullscreen .DiscoveryPanelSticky {
+    padding-bottom: 10px;
+    margin-bottom: 2px;
+  }
+
+  .AppShellListFullscreen .DiscoveryPanelList {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .AppShellListFullscreen .DiscoveryPanelList .FeatureCard {
+    display: none;
+  }
+
+  .AppShellListFullscreen .DiscoveryPanelList .ResultsList {
+    padding-top: 2px;
+  }
+
+  .FeatureCard,
+  .ResultsList,
+  .PlaceCard {
+    position: relative;
+    z-index: 1;
+  }
+
+  .PanelHeader {
+    margin-bottom: 2px;
+  }
+
+  .PanelStatus {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .PanelLink {
+    color: var(--brand);
+    font-weight: 500;
+  }
+
+  .Chips {
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    padding-inline: 0;
+    mask-image: none;
+    overflow-y: visible;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@media (min-width: 720px) {
+  .App {
+    background:
+      radial-gradient(circle at top left, rgba(226, 214, 182, 0.82), transparent 26%),
+      linear-gradient(180deg, #ece1ce 0%, #ddd1bf 100%);
+  }
+
+  .AppShell {
+    height: calc(var(--app-dvh) - 24px);
+    min-height: calc(var(--app-dvh) - 24px);
+    max-height: calc(var(--app-dvh) - 24px);
+    margin: 12px auto;
+    border-radius: 30px;
+    box-shadow:
+      0 24px 64px rgba(90, 78, 58, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.52);
+    border: 1px solid rgba(214, 202, 180, 0.45);
+  }
+}
+
+@media (min-width: 1024px) {
+  .AppShell {
+    max-width: min(1220px, calc(100% - 40px));
+    height: calc(var(--app-dvh) - 32px);
+    min-height: calc(var(--app-dvh) - 32px);
+    max-height: calc(var(--app-dvh) - 32px);
+    margin: 16px auto;
+    grid-template-columns: minmax(520px, 1.15fr) minmax(360px, 0.85fr);
+    grid-template-rows: 1fr auto;
+    border-radius: 26px;
+    overflow: hidden;
+  }
+
+  .AppShellMapOnly {
+    max-width: min(1220px, calc(100% - 40px));
+    height: calc(var(--app-dvh) - 32px);
+    min-height: calc(var(--app-dvh) - 32px);
+    max-height: calc(var(--app-dvh) - 32px);
+    margin: 16px auto;
+    grid-template-columns: minmax(520px, 1.15fr) minmax(360px, 0.85fr);
+    grid-template-rows: 1fr auto;
+    border-radius: 26px;
+    overflow: hidden;
+  }
+
+  .AppShellMapOnly .MapViewport {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .AppShellMapOnly .MapDock {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-left: 1px solid rgba(132, 128, 110, 0.12);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .AppShellMapOnly .MapDock::-webkit-scrollbar {
+    display: none;
+  }
+
+  .AppShellMapOnly .BottomNav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    border-left: 0;
+    border-top-color: rgba(132, 128, 110, 0.08);
+    border-bottom-left-radius: 26px;
+    border-bottom-right-radius: 26px;
+    background: linear-gradient(180deg, rgba(249, 244, 236, 0.96) 0%, #f5ecdf 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.62),
+      0 -8px 20px rgba(88, 76, 57, 0.04);
+  }
+
+  .MapViewport {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    min-height: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .DiscoveryPanel {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-left: 1px solid rgba(132, 128, 110, 0.12);
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+
+  .DiscoveryPanel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .DiscoveryPanelList {
+    overflow: visible;
+  }
+
+  .DiscoveryPanelList .ResultsList {
+    overflow: visible;
+    padding-bottom: 4px;
+  }
+
+  .AppShell:not(.AppShellMapOnly) .BottomNav {
+    grid-column: 2;
+    grid-row: 2;
+    border-left: 1px solid rgba(132, 128, 110, 0.12);
+    border-bottom-right-radius: 26px;
+  }
+}
+

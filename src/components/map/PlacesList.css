@@ -1,0 +1,212 @@
+.ResultsList {
+  width: 100%;
+  min-height: 0;
+  overflow: visible;
+  padding: 10px 0 8px;
+  scrollbar-width: none;
+}
+
+.ResultsList::-webkit-scrollbar {
+  display: none;
+}
+
+.ResultsListVirtualSpace {
+  position: relative;
+  width: 100%;
+}
+
+.ResultsListRow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.ResultsListSkeleton,
+.ResultsListStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.PlaceCard {
+  text-align: left;
+  width: 100%;
+  max-width: none;
+  border: 1px solid rgba(132, 128, 110, 0.1);
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.95), rgba(248, 244, 236, 0.88));
+  border-radius: 20px;
+  padding: 12px;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 10px 24px rgba(106, 95, 73, 0.07);
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
+}
+
+.PlaceCardSelected {
+  border-color: rgba(66, 106, 80, 0.24);
+  box-shadow:
+    0 14px 28px rgba(66, 106, 80, 0.1),
+    inset 0 0 0 1px rgba(66, 106, 80, 0.06);
+}
+
+.PlaceCardGhost {
+  cursor: default;
+  pointer-events: none;
+}
+
+.PlaceCard:hover {
+  transform: translateY(-1px);
+}
+
+.PlaceCard:focus-visible {
+  outline: 2px solid rgba(71, 112, 85, 0.42);
+  outline-offset: 2px;
+}
+
+.PlaceThumb {
+  position: relative;
+  overflow: hidden;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+}
+
+.PlaceThumb--food {
+  background: linear-gradient(135deg, #9dc08b 0%, #c8ddaf 100%);
+}
+
+.PlaceThumb--shop {
+  background: linear-gradient(135deg, #d9b087 0%, #efcfaa 100%);
+}
+
+.PlaceThumb--stay {
+  background: linear-gradient(135deg, #96b8a2 0%, #ccddc9 100%);
+}
+
+.PlaceThumb--surf {
+  background: linear-gradient(135deg, #88b2ae 0%, #bbd5d1 100%);
+}
+
+.PlaceThumb--local {
+  background: linear-gradient(135deg, #b8b79d 0%, #d9d5b8 100%);
+}
+
+.PlaceThumbGhost {
+  background: linear-gradient(135deg, rgba(214, 206, 191, 0.82), rgba(235, 228, 216, 0.92));
+}
+
+.PlaceThumbPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.28), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 100%);
+}
+
+.PlaceThumbPlaceholder .PointMediaIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.PlaceContent {
+  min-width: 0;
+}
+
+.PlaceTopLine {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.PlaceTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1.05;
+  font-weight: 700;
+  color: var(--ink-strong);
+}
+
+.PlaceDistance {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(71, 112, 85, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.PlaceMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.PlaceGhostBlock {
+  display: inline-block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(218, 208, 191, 0.8), rgba(239, 232, 221, 0.96));
+}
+
+.PlaceGhostTitle {
+  width: 132px;
+  height: 15px;
+}
+
+.PlaceGhostDistance {
+  width: 52px;
+  height: 20px;
+}
+
+.PlaceGhostMeta {
+  width: 112px;
+  height: 12px;
+}
+
+.PlaceGhostMetaShort {
+  width: 56px;
+}
+
+.EmptyState {
+  margin-top: 4px;
+  padding: 18px 14px 14px;
+  border: 1px dashed rgba(96, 111, 93, 0.22);
+  border-radius: 16px;
+  background: rgba(248, 244, 236, 0.86);
+  overflow: hidden;
+}
+
+.EmptyStateTitle {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 7vw, 30px);
+  line-height: 0.98;
+  color: var(--ink-strong);
+  max-width: 14ch;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.EmptyStateText {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-top: 8px;
+  max-width: 32ch;
+}

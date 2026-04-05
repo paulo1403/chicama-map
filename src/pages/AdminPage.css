@@ -1,0 +1,174 @@
+.AdminLayout {
+  position: relative;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  background:
+    radial-gradient(circle at top left, rgba(239, 228, 194, 0.78), transparent 28%),
+    linear-gradient(180deg, #f7f0e1 0%, #f4eadb 100%);
+}
+
+.AdminTop {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 14px;
+  background: rgba(247, 240, 225, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(132, 128, 110, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.AdminTitle {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ink-strong);
+}
+
+.AdminSubtitle {
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.AdminActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.AdminSearch {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+}
+
+.AdminMapCard {
+  margin: 0 12px 12px;
+  border: 1px solid rgba(132, 128, 110, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 252, 247, 0.86);
+  box-shadow: 0 10px 28px rgba(106, 95, 73, 0.08);
+  overflow: hidden;
+}
+
+.AdminMapTop {
+  padding: 12px 12px 10px;
+}
+
+.AdminMapTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink-strong);
+}
+
+.AdminMapCoords {
+  margin-top: 6px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.AdminMap {
+  width: 100%;
+  height: 220px;
+}
+
+.AdminMapActions {
+  padding: 10px 12px 12px;
+}
+
+.AdminMapActions .Button {
+  width: 100%;
+}
+
+.AdminListPanel {
+  padding: 0 12px 18px;
+}
+
+.AdminListMeta {
+  margin-bottom: 10px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.AdminList {
+  position: relative;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 180px;
+  max-height: min(52vh, 560px);
+  padding-right: 4px;
+  scrollbar-gutter: stable;
+}
+
+.AdminListInner {
+  position: relative;
+  width: 100%;
+}
+
+.AdminListRow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.AdminListEmpty {
+  border: 1px dashed rgba(132, 128, 110, 0.2);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 252, 247, 0.72);
+}
+
+@media (min-width: 960px) {
+  .AdminList {
+    max-height: calc(var(--app-dvh) - 310px);
+  }
+}
+
+.Card {
+  text-align: left;
+  width: 100%;
+  border: 1px solid rgba(132, 128, 110, 0.12);
+  background: rgba(255, 252, 247, 0.85);
+  border-radius: 18px;
+  padding: 12px;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 10px 28px rgba(106, 95, 73, 0.06);
+  transition: transform 140ms ease;
+}
+
+.CardTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.05;
+  font-weight: 700;
+  color: var(--ink-strong);
+}
+
+.CardMeta {
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.Card:hover {
+  transform: translateY(-1px);
+}
+
+.Card:focus-visible {
+  outline: 2px solid rgba(71, 112, 85, 0.42);
+  outline-offset: 2px;
+}
