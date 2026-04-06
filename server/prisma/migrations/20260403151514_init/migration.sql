@@ -9,8 +9,8 @@ CREATE TABLE "Point" (
     "description" TEXT NOT NULL DEFAULT '',
     "contact" TEXT NOT NULL DEFAULT '',
     "images" JSONB NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateIndex

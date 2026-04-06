@@ -1,6 +1,9 @@
 import L, { type DivIcon } from 'leaflet'
+import './pointMarkerIcon.css'
 import {
   BedDouble,
+  Building2,
+  Coffee,
   GraduationCap,
   type IconNode,
   MapPin,
@@ -25,10 +28,28 @@ type MarkerAppearance = {
 const markerCache = new Map<string, DivIcon>()
 
 const markerByCategory: Record<string, MarkerAppearance> = {
+  playa: {
+    key: 'playa',
+    pinColor: '#4d8c96',
+    iconColor: '#f0fcff',
+    icon: Waves,
+  },
   restaurante: {
     key: 'restaurante',
     pinColor: '#c97856',
     iconColor: '#fff8f1',
+    icon: UtensilsCrossed,
+  },
+  cafeteria: {
+    key: 'cafeteria',
+    pinColor: '#a0714a',
+    iconColor: '#fffaf2',
+    icon: Coffee,
+  },
+  bar: {
+    key: 'bar',
+    pinColor: '#8b5f73',
+    iconColor: '#fff7fb',
     icon: UtensilsCrossed,
   },
   tienda: {
@@ -55,23 +76,41 @@ const markerByCategory: Record<string, MarkerAppearance> = {
     iconColor: '#eef9f1',
     icon: GraduationCap,
   },
-  hospedaje: {
-    key: 'hospedaje',
-    pinColor: '#5f7c8f',
-    iconColor: '#f5fbff',
-    icon: BedDouble,
-  },
-  playa: {
-    key: 'playa',
-    pinColor: '#4d8c96',
-    iconColor: '#f0fcff',
-    icon: Waves,
-  },
   deportes: {
     key: 'deportes',
     pinColor: '#4f7756',
     iconColor: '#f2fff2',
     icon: Waves,
+  },
+  mirador: {
+    key: 'mirador',
+    pinColor: '#5a7d93',
+    iconColor: '#f3fbff',
+    icon: MapPin,
+  },
+  transporte: {
+    key: 'transporte',
+    pinColor: '#6675a1',
+    iconColor: '#f5f7ff',
+    icon: MapPin,
+  },
+  servicios: {
+    key: 'servicios',
+    pinColor: '#69755f',
+    iconColor: '#fbfff8',
+    icon: Building2,
+  },
+  salud: {
+    key: 'salud',
+    pinColor: '#b0666e',
+    iconColor: '#fff8f8',
+    icon: Building2,
+  },
+  hospedaje: {
+    key: 'hospedaje',
+    pinColor: '#5f7c8f',
+    iconColor: '#f5fbff',
+    icon: BedDouble,
   },
   otros: {
     key: 'otros',

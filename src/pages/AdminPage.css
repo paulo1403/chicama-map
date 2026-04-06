@@ -8,6 +8,10 @@
     linear-gradient(180deg, #f7f0e1 0%, #f4eadb 100%);
 }
 
+.AdminLayoutSheetOpen {
+  overflow: hidden;
+}
+
 .AdminTop {
   position: sticky;
   top: 0;
@@ -44,14 +48,156 @@
   flex-wrap: wrap;
 }
 
-.AdminSearch {
-  display: flex;
-  gap: 10px;
-  padding: 12px;
+.AdminHeroCard {
+  margin: 12px;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(132, 128, 110, 0.14);
+  background:
+    radial-gradient(circle at top right, rgba(122, 157, 116, 0.12), transparent 32%),
+    rgba(255, 252, 247, 0.88);
+  box-shadow: 0 12px 28px rgba(106, 95, 73, 0.08);
 }
 
-.AdminMapCard {
-  margin: 0 12px 12px;
+.AdminEyebrow,
+.AdminSectionEyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(83, 92, 74, 0.74);
+}
+
+.AdminHeroHeadingRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.AdminHeroHeading {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.05;
+  color: var(--ink-strong);
+}
+
+.AdminHeroText {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.AdminStatusPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(132, 128, 110, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.AdminStatusPill.is-ready {
+  border-color: rgba(79, 119, 86, 0.18);
+  background: rgba(79, 119, 86, 0.12);
+  color: var(--brand);
+}
+
+.AdminStepGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.AdminStepCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(132, 128, 110, 0.12);
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.AdminStepCard.is-done {
+  border-color: rgba(79, 119, 86, 0.18);
+  background: rgba(79, 119, 86, 0.08);
+}
+
+.AdminStepIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  background: rgba(79, 119, 86, 0.12);
+  color: var(--brand);
+}
+
+.AdminStepTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-strong);
+}
+
+.AdminStepText {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.AdminSearch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 0 12px 12px;
+  align-items: center;
+}
+
+.AdminSearchField {
+  position: relative;
+  display: block;
+}
+
+.AdminSearchIcon {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
+.AdminSearchField .Field {
+  padding-left: 40px;
+}
+
+.AdminSearchActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.AdminWorkspaceGrid {
+  display: grid;
+  gap: 12px;
+  padding: 0 12px 18px;
+}
+
+.AdminMapCard,
+.AdminListPanel {
   border: 1px solid rgba(132, 128, 110, 0.14);
   border-radius: 20px;
   background: rgba(255, 252, 247, 0.86);
@@ -59,11 +205,21 @@
   overflow: hidden;
 }
 
-.AdminMapTop {
-  padding: 12px 12px 10px;
+.AdminMapTop,
+.AdminListPanelTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
+.AdminMapTop {
+  padding: 12px 12px 8px;
+}
+
+.AdminSectionTitle,
 .AdminMapTitle {
+  margin-top: 4px;
   font-family: var(--font-display);
   font-size: 20px;
   line-height: 1;
@@ -71,57 +227,59 @@
 }
 
 .AdminMapCoords {
-  margin-top: 6px;
   color: var(--ink-soft);
   font-size: 12px;
   line-height: 1.25;
 }
 
+.AdminMapCoordsActive {
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: rgba(79, 119, 86, 0.1);
+  border: 1px solid rgba(79, 119, 86, 0.12);
+  color: var(--brand);
+}
+
+.AdminMapHelper {
+  padding: 0 12px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
 .AdminMap {
   width: 100%;
-  height: 220px;
+  height: 230px;
 }
 
 .AdminMapActions {
+  display: flex;
+  gap: 8px;
   padding: 10px 12px 12px;
 }
 
 .AdminMapActions .Button {
-  width: 100%;
+  flex: 1 1 0;
 }
 
 .AdminListPanel {
-  padding: 0 12px 18px;
+  padding: 12px;
 }
 
 .AdminListMeta {
-  margin-bottom: 10px;
   color: var(--ink-soft);
   font-size: 12px;
   line-height: 1.25;
 }
 
 .AdminList {
-  position: relative;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  display: grid;
+  gap: 10px;
   min-height: 180px;
-  max-height: min(52vh, 560px);
-  padding-right: 4px;
-  scrollbar-gutter: stable;
-}
-
-.AdminListInner {
-  position: relative;
-  width: 100%;
 }
 
 .AdminListRow {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  padding-bottom: 10px;
 }
 
 .AdminListEmpty {
@@ -129,12 +287,6 @@
   border-radius: 18px;
   padding: 16px;
   background: rgba(255, 252, 247, 0.72);
-}
-
-@media (min-width: 960px) {
-  .AdminList {
-    max-height: calc(var(--app-dvh) - 310px);
-  }
 }
 
 .Card {
@@ -148,6 +300,45 @@
   box-sizing: border-box;
   box-shadow: 0 10px 28px rgba(106, 95, 73, 0.06);
   transition: transform 140ms ease;
+}
+
+.AdminPointCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.CardHint {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(79, 119, 86, 0.08);
+  color: var(--brand);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.AdminMetaPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.AdminMetaPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(132, 128, 110, 0.14);
+  background: rgba(244, 238, 228, 0.84);
+  color: var(--ink);
+  font-size: 11px;
 }
 
 .CardTitle {
@@ -171,4 +362,85 @@
 .Card:focus-visible {
   outline: 2px solid rgba(71, 112, 85, 0.42);
   outline-offset: 2px;
+}
+
+.AdminPagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(132, 128, 110, 0.12);
+}
+
+.AdminPaginationMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.AdminPaginationMeta strong {
+  color: var(--ink-strong);
+  font-size: 13px;
+}
+
+.AdminPaginationActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 719px) {
+  .AdminTop,
+  .AdminHeroHeadingRow,
+  .AdminMapTop,
+  .AdminListPanelTop {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .AdminActions {
+    justify-content: flex-start;
+  }
+
+  .AdminStepGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .AdminSearch {
+    grid-template-columns: 1fr;
+  }
+
+  .AdminSearchActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .AdminMapActions {
+    flex-direction: column;
+  }
+
+  .AdminPagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .AdminPaginationActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .AdminWorkspaceGrid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    align-items: start;
+  }
+
+  .AdminList {
+    max-height: calc(var(--app-dvh) - 360px);
+  }
 }

@@ -1,9 +1,17 @@
 export type CategoryKey =
+  | 'playa'
   | 'restaurante'
+  | 'cafeteria'
+  | 'bar'
   | 'tienda'
   | 'venta_tablas'
   | 'alquiler_tablas'
   | 'escuela_surf'
+  | 'deportes'
+  | 'mirador'
+  | 'transporte'
+  | 'servicios'
+  | 'salud'
   | 'hospedaje'
   | 'otros'
 

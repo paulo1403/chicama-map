@@ -1,5 +1,5 @@
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useMemo, useRef, useState } from 'react'
+import { CircleCheck, Crosshair, NotebookPen, Search } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
 import { Link, useNavigate } from 'react-router-dom'
 import './AdminPage.css'
@@ -28,7 +28,7 @@ export function AdminPage() {
     deletePointMutation,
     updatePointMutation,
   } = usePointMutations(token)
-  const { copy, formatCategories } = useI18n()
+  const { copy, formatCategories, language } = useI18n()
 
   const [authError, setAuthError] = useState<string | null>(null)
   const [username, setUsername] = useState('')
@@ -36,7 +36,7 @@ export function AdminPage() {
   const [query, setQuery] = useState('')
   const [draft, setDraft] = useState<AdminDraft | null>(null)
   const [pickedCoords, setPickedCoords] = useState<{ lat: number; lng: number } | null>(null)
-  const adminListRef = useRef<HTMLDivElement | null>(null)
+  const [page, setPage] = useState(1)
 
   const filteredPoints = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -50,16 +50,114 @@ export function AdminPage() {
     updatePointMutation.isPending ||
     deletePointMutation.isPending
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const rowVirtualizer = useVirtualizer({
-    count: filteredPoints.length,
-    getScrollElement: () => adminListRef.current,
-    estimateSize: () => 96,
-    overscan: 10,
-  })
-
-  const virtualRows = rowVirtualizer.getVirtualItems()
+  const pageSize = 6
+  const totalPages = Math.max(1, Math.ceil(filteredPoints.length / pageSize))
+  const currentPage = Math.min(page, totalPages)
+  const pageStart = (currentPage - 1) * pageSize
+  const paginatedPoints = filteredPoints.slice(pageStart, pageStart + pageSize)
+  const rangeStart = filteredPoints.length === 0 ? 0 : pageStart + 1
+  const rangeEnd = Math.min(pageStart + pageSize, filteredPoints.length)
   const sheetOpen = Boolean(draft) || (!token && backendAvailable)
+
+  useEffect(() => {
+    setPage(1)
+  }, [query])
+
+  useEffect(() => {
+    setPage((current) => Math.min(current, totalPages))
+  }, [totalPages])
+
+  useEffect(() => {
+    if (!sheetOpen) return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [sheetOpen])
+  const adminUxCopy =
+    language === 'en'
+      ? {
+          eyebrow: 'Faster point creation',
+          title: 'A clearer workflow for adding places',
+          subtitle: 'Sign in, pick the spot on the map, then complete only the key fields to publish it.',
+          sessionReady: 'Admin session ready',
+          sessionNeeded: 'Sign in required',
+          noCoords: 'No map point selected yet',
+          stepLogin: '1. Sign in',
+          stepPick: '2. Pick on map',
+          stepFill: '3. Complete details',
+          stepLoginText: 'Use the admin panel to unlock create and edit actions.',
+          stepPickText: 'Tap the map where the place should appear.',
+          stepFillText: 'Add a name, categories, and a short helpful description.',
+          createFromMap: 'Create from map',
+          mapEyebrow: 'Pin the location',
+          mapHelperReady: 'Tip: choose the exact entrance or storefront for better directions.',
+          listEyebrow: 'Existing places',
+          listTitle: 'Edit and refine your points',
+          editHint: 'Tap to edit',
+          previousPage: 'Previous',
+          nextPage: 'Next',
+          pageSummary: (current: number, total: number) => `Page ${current} of ${total}`,
+          pageRange: (start: number, end: number, total: number) => `${start}-${end} of ${total} places`,
+        }
+      : {
+          eyebrow: 'Carga de puntos más rápida',
+          title: 'Un flujo más claro para agregar lugares',
+          subtitle: 'Inicia sesión, marca el punto en el mapa y completa solo los campos clave para publicarlo.',
+          sessionReady: 'Sesión admin activa',
+          sessionNeeded: 'Necesitas iniciar sesión',
+          noCoords: 'Aún no elegiste una ubicación en el mapa',
+          stepLogin: '1. Inicia sesión',
+          stepPick: '2. Marca en el mapa',
+          stepFill: '3. Completa detalles',
+          stepLoginText: 'Abre el panel admin para desbloquear crear y editar.',
+          stepPickText: 'Toca el mapa en el lugar exacto donde debe aparecer.',
+          stepFillText: 'Agrega nombre, categorías y una breve descripción útil.',
+          createFromMap: 'Crear desde mapa',
+          mapEyebrow: 'Ubica el punto',
+          mapHelperReady: 'Tip: marca la entrada o fachada exacta para que la ruta sea más útil.',
+          listEyebrow: 'Lugares existentes',
+          listTitle: 'Edita y mejora tus puntos',
+          editHint: 'Toca para editar',
+          previousPage: 'Anterior',
+          nextPage: 'Siguiente',
+          pageSummary: (current: number, total: number) => `Página ${current} de ${total}`,
+          pageRange: (start: number, end: number, total: number) => `${start}-${end} de ${total} lugares`,
+        }
+
+  const activeCoords = draft
+    ? { lat: draft.lat, lng: draft.lng }
+    : pickedCoords
+
+  const selectedCoordsLabel = activeCoords
+    ? `Lat ${activeCoords.lat.toFixed(5)} · Lng ${activeCoords.lng.toFixed(5)}`
+    : adminUxCopy.noCoords
+
+  const activeMarkerCategories = draft?.categories.length ? draft.categories : ['otros']
+
+  const guideSteps = [
+    {
+      icon: CircleCheck,
+      title: adminUxCopy.stepLogin,
+      text: token ? adminUxCopy.sessionReady : adminUxCopy.stepLoginText,
+      done: Boolean(token),
+    },
+    {
+      icon: Crosshair,
+      title: adminUxCopy.stepPick,
+      text: activeCoords ? selectedCoordsLabel : adminUxCopy.stepPickText,
+      done: Boolean(activeCoords),
+    },
+    {
+      icon: NotebookPen,
+      title: adminUxCopy.stepFill,
+      text: draft?.name.trim() ? draft.name.trim() : adminUxCopy.stepFillText,
+      done: Boolean(draft?.name.trim()),
+    },
+  ]
 
   function closeSheet() {
     setDraft(null)
@@ -82,6 +180,11 @@ export function AdminPage() {
     setToken(null)
     closeSheet()
     navigate('/', { replace: true })
+  }
+
+  function handlePickCoords(coords: { lat: number; lng: number }) {
+    setPickedCoords(coords)
+    setDraft((current) => (current ? { ...current, lat: coords.lat, lng: coords.lng } : current))
   }
 
   function startCreate(coords?: { lat: number; lng: number }) {
@@ -211,7 +314,7 @@ export function AdminPage() {
   }
 
   return (
-    <div className="AdminLayout">
+    <div className={sheetOpen ? 'AdminLayout AdminLayoutSheetOpen' : 'AdminLayout'}>
       <div className="AdminTop">
         <div>
           <div className="AdminTitle">{copy.adminPage.title}</div>
@@ -235,26 +338,77 @@ export function AdminPage() {
         </div>
       </div>
 
+      <section className="AdminHeroCard" aria-label={adminUxCopy.title}>
+        <div className="AdminHeroIntro">
+          <div className="AdminEyebrow">{adminUxCopy.eyebrow}</div>
+          <div className="AdminHeroHeadingRow">
+            <div className="AdminHeroHeading">{adminUxCopy.title}</div>
+            <span className={token ? 'AdminStatusPill is-ready' : 'AdminStatusPill'}>
+              {token ? adminUxCopy.sessionReady : adminUxCopy.sessionNeeded}
+            </span>
+          </div>
+          <p className="AdminHeroText">{adminUxCopy.subtitle}</p>
+        </div>
+
+        <div className="AdminStepGrid">
+          {guideSteps.map((step) => {
+            const Icon = step.icon
+
+            return (
+              <div className={step.done ? 'AdminStepCard is-done' : 'AdminStepCard'} key={step.title}>
+                <span className="AdminStepIcon">
+                  <Icon size={16} strokeWidth={2.2} />
+                </span>
+                <div>
+                  <div className="AdminStepTitle">{step.title}</div>
+                  <div className="AdminStepText">{step.text}</div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
       <div className="AdminSearch">
-        <input
-          className="Field"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={copy.common.searchByNamePlaceholder}
-        />
-        <button className="Button ButtonPrimary" type="button" onClick={() => startCreate()} disabled={!token || busy}>
-          {copy.common.new}
-        </button>
+        <label className="AdminSearchField">
+          <Search aria-hidden="true" className="AdminSearchIcon" size={16} strokeWidth={2.2} />
+          <input
+            className="Field"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={copy.common.searchByNamePlaceholder}
+          />
+        </label>
+
+        <div className="AdminSearchActions">
+          <button className="Button" type="button" onClick={() => startCreate()} disabled={!token || busy}>
+            {copy.common.new}
+          </button>
+          <button
+            className="Button ButtonPrimary"
+            type="button"
+            onClick={openCreateFromMap}
+            disabled={!token || !pickedCoords || busy}
+          >
+            {adminUxCopy.createFromMap}
+          </button>
+        </div>
       </div>
 
+      <div className="AdminWorkspaceGrid">
       <section className="AdminMapCard" aria-label={copy.adminPage.mapSectionLabel}>
         <div className="AdminMapTop">
-          <div className="AdminMapTitle">{copy.adminPage.mapTitle}</div>
-          <div className="AdminMapCoords">
-            {pickedCoords
-              ? `Lat ${pickedCoords.lat.toFixed(6)} · Lng ${pickedCoords.lng.toFixed(6)}`
-              : copy.adminPage.mapHint}
+          <div>
+            <div className="AdminSectionEyebrow">{adminUxCopy.mapEyebrow}</div>
+            <div className="AdminMapTitle">{copy.adminPage.mapTitle}</div>
           </div>
+          <div className={activeCoords ? 'AdminMapCoords AdminMapCoordsActive' : 'AdminMapCoords'}>
+            {selectedCoordsLabel}
+          </div>
+        </div>
+
+        <div className="AdminMapHelper">
+          {token ? adminUxCopy.mapHelperReady : copy.adminPage.signInToCreate}
         </div>
 
         <MapContainer center={DEFAULT_CENTER} zoom={15} className="AdminMap" zoomControl={false}>
@@ -263,7 +417,7 @@ export function AdminPage() {
             subdomains={['a', 'b', 'c', 'd']}
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
           />
-          <AdminMapPicker onPick={setPickedCoords} />
+          <AdminMapPicker onPick={handlePickCoords} />
 
           {points.map((point) => (
             <Marker
@@ -273,10 +427,10 @@ export function AdminPage() {
             />
           ))}
 
-          {pickedCoords && (
+          {activeCoords && (
             <Marker
-              icon={getPointMarkerIcon(['otros'], true)}
-              position={[pickedCoords.lat, pickedCoords.lng]}
+              icon={getPointMarkerIcon(activeMarkerCategories, true)}
+              position={[activeCoords.lat, activeCoords.lng]}
               zIndexOffset={500}
             />
           )}
@@ -295,36 +449,38 @@ export function AdminPage() {
       </section>
 
       <section className="AdminListPanel">
-        <div className="AdminListMeta">{copy.adminPage.pointsCount(filteredPoints.length)}</div>
+        <div className="AdminListPanelTop">
+          <div>
+            <div className="AdminSectionEyebrow">{adminUxCopy.listEyebrow}</div>
+            <div className="AdminSectionTitle">{adminUxCopy.listTitle}</div>
+          </div>
+          <div className="AdminListMeta">{copy.adminPage.pointsCount(filteredPoints.length)}</div>
+        </div>
 
-        <div className="AdminList" ref={adminListRef} role="list" aria-busy={loading}>
+        <div className="AdminList" role="list" aria-busy={loading}>
           {filteredPoints.length > 0 ? (
-            <div className="AdminListInner" style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
-              {virtualRows.map((virtualRow) => {
-                const point = filteredPoints[virtualRow.index]
-                if (!point) return null
-
-                return (
-                  <div
-                    className="AdminListRow"
-                    data-index={virtualRow.index}
-                    key={point.id}
-                    ref={rowVirtualizer.measureElement}
-                    style={{ transform: `translateY(${virtualRow.start}px)` }}
-                  >
-                    <button className="Card" type="button" onClick={() => startEdit(point)}>
+            paginatedPoints.map((point) => (
+              <div className="AdminListRow" key={point.id}>
+                <button className="Card AdminPointCard" type="button" onClick={() => startEdit(point)}>
+                  <div className="AdminPointCardTop">
+                    <div>
                       <div className="CardTitle">{point.name}</div>
                       <div className="CardMeta">
                         {point.categories.length ? formatCategories(point.categories) : copy.adminPage.noCategory}
                       </div>
-                      <div className="CardMeta">
-                        {point.rating > 0 ? copy.adminPage.rating(point.rating) : copy.adminPage.noRating}
-                      </div>
-                    </button>
+                    </div>
+                    <span className="CardHint">{adminUxCopy.editHint}</span>
                   </div>
-                )
-              })}
-            </div>
+
+                  <div className="AdminMetaPills">
+                    <span className="AdminMetaPill">
+                      {point.rating > 0 ? copy.adminPage.rating(point.rating) : copy.adminPage.noRating}
+                    </span>
+                    <span className="AdminMetaPill">Lat {point.lat.toFixed(4)} · Lng {point.lng.toFixed(4)}</span>
+                  </div>
+                </button>
+              </div>
+            ))
           ) : !loading ? (
             <div className="AdminListEmpty">
               <div className="EmptyStateTitle">
@@ -336,7 +492,36 @@ export function AdminPage() {
             </div>
           ) : null}
         </div>
+
+        {filteredPoints.length > 0 ? (
+          <div className="AdminPagination" aria-label="Paginación de puntos">
+            <div className="AdminPaginationMeta">
+              <strong>{adminUxCopy.pageSummary(currentPage, totalPages)}</strong>
+              <span>{adminUxCopy.pageRange(rangeStart, rangeEnd, filteredPoints.length)}</span>
+            </div>
+
+            <div className="AdminPaginationActions">
+              <button
+                className="Button"
+                type="button"
+                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                disabled={currentPage === 1}
+              >
+                {adminUxCopy.previousPage}
+              </button>
+              <button
+                className="Button"
+                type="button"
+                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                disabled={currentPage === totalPages}
+              >
+                {adminUxCopy.nextPage}
+              </button>
+            </div>
+          </div>
+        ) : null}
       </section>
+      </div>
 
       <AdminSheet
         authError={authError}

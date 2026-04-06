@@ -1,4 +1,5 @@
 import { divIcon, point as leafletPoint } from 'leaflet'
+import { ChevronDown } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Skeleton } from 'boneyard-js/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -136,10 +137,12 @@ const FEATURED_SKELETON_POINT: MapPoint = {
   updatedAt: 0,
 }
 
+const MOBILE_DOCK_MEDIA_QUERY = '(max-width: 719px)'
+
 export function MapPage() {
   const queryClient = useQueryClient()
   const { savedIds, toggleSaved } = useSavedPoints()
-  const { categoryLabel, copy } = useI18n()
+  const { categoryLabel, copy, formatCategories } = useI18n()
 
   const [activeCategories, setActiveCategories] = useState<CategoryKey[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -149,6 +152,10 @@ export function MapPage() {
   const [locateRequested, setLocateRequested] = useState(false)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [viewport, setViewport] = useState<MapViewportState | null>(null)
+  const [isMobileViewport, setIsMobileViewport] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(MOBILE_DOCK_MEDIA_QUERY).matches,
+  )
+  const [isMobileDockExpanded, setIsMobileDockExpanded] = useState(false)
   const mapViewportRef = useRef<HTMLElement | null>(null)
 
   const sortOptions: Array<{ value: PointSortOption; label: string }> = [
@@ -192,6 +199,28 @@ export function MapPage() {
   const selectedPoint = selectedPointDetail ?? (selectedPointPreview ? toPreviewPoint(selectedPointPreview) : null)
   const showDockSkeleton = loading && visiblePoints.length === 0
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+
+    const mediaQuery = window.matchMedia(MOBILE_DOCK_MEDIA_QUERY)
+
+    const syncViewport = (matches: boolean) => {
+      setIsMobileViewport(matches)
+      if (!matches) {
+        setIsMobileDockExpanded(true)
+      }
+    }
+
+    syncViewport(mediaQuery.matches)
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      syncViewport(event.matches)
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
   function toggleCategory(key: CategoryKey) {
     setActiveCategories((previous) => {
       if (previous.includes(key)) return previous.filter((category) => category !== key)
@@ -220,107 +249,163 @@ export function MapPage() {
 
   const activeCount = activeCategories.length
   const statusText = !backendAvailable ? copy.mapPage.apiOffline : loading ? copy.mapPage.loading : copy.mapPage.resultsCount(total)
+  const isDockExpanded = !isMobileViewport || isMobileDockExpanded
+  const dockPreviewTitle = selectedPoint?.name ?? (showDockSkeleton ? copy.mapPage.loading : copy.mapPage.emptyFilteredTitle)
+  const dockPreviewSubtitle = selectedPoint
+    ? selectedPoint.categories.length > 0
+      ? formatCategories(selectedPoint.categories)
+      : copy.featured.localSpot
+    : activeCount > 0
+      ? copy.mapHero.filtersWithCount(activeCount)
+      : statusText
+
+  const handleToggleFilters = useCallback(() => {
+    if (isMobileViewport) {
+      setIsMobileDockExpanded(true)
+    }
+
+    setFiltersOpen((previous) => !previous)
+  }, [isMobileViewport])
+
+  const handleSelectPoint = useCallback(
+    (pointId: string) => {
+      setSelectedPointId(pointId)
+
+      if (isMobileViewport) {
+        setIsMobileDockExpanded(true)
+      }
+    },
+    [isMobileViewport],
+  )
 
   return (
-    <div className="App AppShell AppShellMapOnly" data-route-surface="map">
-      <section className="MapViewport" ref={mapViewportRef}>
-        <MapContainer center={DEFAULT_CENTER} zoom={DEFAULT_ZOOM} className="Map" zoomControl={false}>
-          <MapViewportWatcher onChange={setViewport} />
-          <MapFocus point={selectedPoint} />
-          <MapLocateButton requested={locateRequested} onLocated={() => setLocateRequested(false)} onLocationFound={setUserLocation} />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            subdomains={['a', 'b', 'c', 'd']}
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          />
-          {userLocation && (
-            <Marker
-              position={[userLocation.lat, userLocation.lng]}
-              icon={getUserLocationIcon()}
-              zIndexOffset={100}
+    <div className="MapPageSurface">
+      <div className="AppShell AppShellMapOnly" data-route-surface="map">
+        <section className="MapViewport" ref={mapViewportRef}>
+          <MapContainer center={DEFAULT_CENTER} zoom={DEFAULT_ZOOM} className="Map" zoomControl={false}>
+            <MapViewportWatcher onChange={setViewport} />
+            <MapFocus point={selectedPoint} />
+            <MapLocateButton requested={locateRequested} onLocated={() => setLocateRequested(false)} onLocationFound={setUserLocation} />
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              subdomains={['a', 'b', 'c', 'd']}
+              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             />
-          )}
-          <MapMarkerLayer
-            groups={markerGroups}
-            selectedPointId={effectiveSelectedPointId}
-            onSelectPoint={setSelectedPointId}
-            onPreloadDetails={preloadPointDetails}
+            {userLocation && (
+              <Marker
+                position={[userLocation.lat, userLocation.lng]}
+                icon={getUserLocationIcon()}
+                zIndexOffset={100}
+              />
+            )}
+            <MapMarkerLayer
+              groups={markerGroups}
+              selectedPointId={effectiveSelectedPointId}
+              onSelectPoint={handleSelectPoint}
+              onPreloadDetails={preloadPointDetails}
+            />
+          </MapContainer>
+
+          <div className="MapWash" />
+
+          <MapHero
+            searchQuery={searchQuery}
+            activeCount={activeCount}
+            onSearchChange={setSearchQuery}
+            onToggleFilters={handleToggleFilters}
+            onRequestLocate={() => setLocateRequested(true)}
           />
-        </MapContainer>
+        </section>
 
-        <div className="MapWash" />
+        <section className={isDockExpanded ? 'MapDock is-expanded' : 'MapDock is-collapsed'}>
+          <button
+            aria-controls="map-dock-content"
+            aria-expanded={isDockExpanded}
+            aria-label={isDockExpanded ? copy.common.close : copy.mapHero.filters}
+            className="MapDockHandle"
+            onClick={() => setIsMobileDockExpanded((previous) => !previous)}
+            type="button"
+          >
+            <span aria-hidden="true" className="MapDockHandleGrip" />
+            <span className="MapDockHandleSummary">
+              <span className="MapDockHandleEyebrow">{statusText}</span>
+              <strong>{dockPreviewTitle}</strong>
+              <small>{dockPreviewSubtitle}</small>
+            </span>
+            <span aria-hidden="true" className="MapDockHandleIcon">
+              <ChevronDown size={18} strokeWidth={2.2} />
+            </span>
+          </button>
 
-        <MapHero
-          searchQuery={searchQuery}
-          activeCount={activeCount}
-          onSearchChange={setSearchQuery}
-          onToggleFilters={() => setFiltersOpen((previous) => !previous)}
-          onRequestLocate={() => setLocateRequested(true)}
-        />
-      </section>
+          <div
+            className="MapDockContent"
+            id="map-dock-content"
+            aria-hidden={!isDockExpanded}
+            style={isMobileViewport ? { maxHeight: isDockExpanded ? 'min(40dvh, 320px)' : '0px' } : undefined}
+          >
+            <Skeleton name="map-dock-panel" loading={showDockSkeleton} color="#e8dcc8">
+            <div className="MapDockTopBar">
+              <div className="PanelStatus">{statusText}</div>
+              <label className="MapSortField">
+                <select
+                  className="SortSelect"
+                  value={sortOrder}
+                  onChange={(event) => setSortOrder(event.target.value as PointSortOption)}
+                  aria-label={copy.common.sortLabel}
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
 
-      <section className="MapDock">
-        <Skeleton name="map-dock-panel" loading={showDockSkeleton} color="#e8dcc8">
-          <div className="MapDockTopBar">
-            <div className="PanelStatus">{statusText}</div>
-            <label className="MapSortField">
-              <select
-                className="SortSelect"
-                value={sortOrder}
-                onChange={(event) => setSortOrder(event.target.value as PointSortOption)}
-                aria-label={copy.common.sortLabel}
-              >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          {filtersOpen && (
-            <div className="Chips MapDockChips" aria-label={copy.mapHero.filters}>
-              <button
-                className={activeCategories.length === 0 ? 'Chip ChipActive' : 'Chip'}
-                onClick={() => setActiveCategories([])}
-                type="button"
-              >
-                {copy.mapPage.all}
-              </button>
-              {CATEGORIES.map((category) => (
+            {filtersOpen && (
+              <div className="Chips MapDockChips" aria-label={copy.mapHero.filters}>
                 <button
-                  key={category.key}
-                  className={activeCategories.includes(category.key) ? 'Chip ChipActive' : 'Chip'}
-                  onClick={() => toggleCategory(category.key)}
+                  className={activeCategories.length === 0 ? 'Chip ChipActive' : 'Chip'}
+                  onClick={() => setActiveCategories([])}
                   type="button"
                 >
-                  {categoryLabel(category.key)}
+                  {copy.mapPage.all}
                 </button>
-              ))}
-            </div>
-          )}
+                {CATEGORIES.map((category) => (
+                  <button
+                    key={category.key}
+                    className={activeCategories.includes(category.key) ? 'Chip ChipActive' : 'Chip'}
+                    onClick={() => toggleCategory(category.key)}
+                    type="button"
+                  >
+                    {categoryLabel(category.key)}
+                  </button>
+                ))}
+              </div>
+            )}
 
-          {selectedPoint || showDockSkeleton ? (
-            <div className="MapDockCard">
-              <FeaturedPointCard
-                point={selectedPoint ?? FEATURED_SKELETON_POINT}
-                saved={selectedPoint ? savedIds.includes(selectedPoint.id) : false}
-                loading={showDockSkeleton}
-                onToggleSaved={toggleSaved}
-                onOpenDirections={openDirections}
-              />
-            </div>
-          ) : (
-            <div className="MapDockEmpty">
-              <div className="EmptyStateTitle">{copy.mapPage.emptyFilteredTitle}</div>
-              <div className="EmptyStateText">{copy.mapPage.emptyFilteredText}</div>
-            </div>
-          )}
-        </Skeleton>
-      </section>
+            {selectedPoint || showDockSkeleton ? (
+              <div className="MapDockCard">
+                <FeaturedPointCard
+                  point={selectedPoint ?? FEATURED_SKELETON_POINT}
+                  saved={selectedPoint ? savedIds.includes(selectedPoint.id) : false}
+                  loading={showDockSkeleton}
+                  onToggleSaved={toggleSaved}
+                  onOpenDirections={openDirections}
+                />
+              </div>
+            ) : (
+              <div className="MapDockEmpty">
+                <div className="EmptyStateTitle">{copy.mapPage.emptyFilteredTitle}</div>
+                <div className="EmptyStateText">{copy.mapPage.emptyFilteredText}</div>
+              </div>
+            )}
+          </Skeleton>
+        </div>
+        </section>
 
-      <BottomNav savedCount={savedIds.length} />
+        <BottomNav savedCount={savedIds.length} />
+      </div>
     </div>
   )
 }

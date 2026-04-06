@@ -15,15 +15,26 @@ export function formatCategories(categories: CategoryKey[], language: Language =
 }
 
 export function getPointTone(point: MapPoint): PointTone {
-  if (point.categories.includes('restaurante')) return 'food'
-  if (point.categories.includes('tienda')) return 'shop'
+  if (
+    point.categories.includes('restaurante') ||
+    point.categories.includes('cafeteria') ||
+    point.categories.includes('bar')
+  ) {
+    return 'food'
+  }
+
+  if (point.categories.includes('tienda') || point.categories.includes('servicios')) return 'shop'
   if (point.categories.includes('hospedaje')) return 'stay'
+
   if (
     point.categories.includes('escuela_surf') ||
     point.categories.includes('venta_tablas') ||
-    point.categories.includes('alquiler_tablas')
+    point.categories.includes('alquiler_tablas') ||
+    point.categories.includes('playa') ||
+    point.categories.includes('deportes')
   ) {
     return 'surf'
   }
+
   return 'local'
 }

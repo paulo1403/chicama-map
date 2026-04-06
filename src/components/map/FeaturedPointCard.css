@@ -1,13 +1,13 @@
 .FeatureCard {
   display: grid;
-  grid-template-columns: 84px 1fr;
-  gap: 14px;
-  padding: 16px;
-  margin-top: 14px;
-  border-radius: 22px;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  padding: 13px;
+  margin-top: 10px;
+  border-radius: 18px;
   background: rgba(255, 252, 247, 0.9);
   border: 1px solid rgba(132, 128, 110, 0.12);
-  box-shadow: 0 16px 34px rgba(97, 88, 69, 0.09);
+  box-shadow: 0 12px 26px rgba(97, 88, 69, 0.08);
 }
 
 .FeatureCardLoading {
@@ -17,9 +17,9 @@
 .FeatureMedia {
   position: relative;
   overflow: hidden;
-  border-radius: 18px;
-  width: 84px;
-  height: 84px;
+  border-radius: 16px;
+  width: 76px;
+  height: 76px;
 }
 
 .FeatureMedia--food {
@@ -73,41 +73,41 @@
 
 .FeatureTitle {
   font-family: var(--font-display);
-  font-size: 17px;
-  line-height: 1.05;
+  font-size: 16px;
+  line-height: 1.02;
   font-weight: 700;
   color: var(--ink-strong);
 }
 
 .FeatureSubtitle {
-  margin-top: 5px;
-  font-size: 13px;
+  margin-top: 4px;
+  font-size: 12px;
   color: var(--ink-soft);
 }
 
 .FeatureDescription {
-  margin: 12px 0 0;
-  font-size: 14px;
-  line-height: 1.45;
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.38;
   color: var(--ink);
 }
 
 .FeatureActions {
   display: flex;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .PointBadges {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .Badge {
-  font-size: 12px;
-  padding: 7px 11px;
+  font-size: 11px;
+  padding: 5px 9px;
   border-radius: 999px;
   border: 1px solid rgba(132, 128, 110, 0.16);
   background: rgba(240, 235, 225, 0.88);
@@ -118,15 +118,18 @@
 .ActionButton {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.78);
-  padding: 10px 14px;
-  border-radius: 14px;
+  padding: 8px 12px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 8px 22px rgba(98, 90, 68, 0.08);
+  box-shadow: 0 6px 16px rgba(98, 90, 68, 0.07);
   color: var(--ink-strong);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: transform 140ms ease;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .SaveButtonActive,
@@ -147,13 +150,81 @@
   outline-offset: 2px;
 }
 
-@media (max-width: 420px) {
+@media (max-width: 719px) {
   .FeatureCard {
-    grid-template-columns: 72px 1fr;
+    grid-template-columns: 58px 1fr;
+    gap: 9px;
+    padding: 10px;
+    border-radius: 16px;
+    margin-top: 8px;
   }
 
   .FeatureMedia {
-    width: 72px;
-    height: 72px;
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+  }
+
+  .PointMediaIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .FeatureTopRow {
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .FeatureTitle {
+    font-size: 15px;
+  }
+
+  .FeatureSubtitle {
+    margin-top: 2px;
+    font-size: 11px;
+  }
+
+  .FeatureDescription {
+    margin-top: 6px;
+    font-size: 12px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .PointBadges {
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .Badge {
+    font-size: 10px;
+    padding: 4px 7px;
+  }
+
+  .SaveButton,
+  .ActionButton {
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+
+  .FeatureActions {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .FeatureCard {
+    grid-template-columns: 52px 1fr;
+    gap: 8px;
+    padding: 9px;
+  }
+
+  .FeatureMedia {
+    width: 52px;
+    height: 52px;
   }
 }
